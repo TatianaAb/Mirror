@@ -9,22 +9,22 @@ const micInputStream = micInstance.getAudioStream();
 var conversation_response = "";
 
 var speech_to_text = watson.speech_to_text({
-  username: config.STTUsername,
-  password: config.STTPassword,
+  username: config.credentials.speech_to_text.username,
+  password: config.credentials.speech_to_text.password,
   version: 'v1'
 });
 
 
 var conversation = watson.conversation({
-  username: config.ConUsername,
-  password: config.ConPassword,
+  username: config.credentials.conversation.username,
+  password: config.credentials.conversation.password,
   version: 'v1',
   version_date: '2016-07-11'
 });
 
 var text_to_speech = watson.text_to_speech({
-  username: config.TTSUsername,
-  password: config.TTSPassword,
+  username: config.credentials.text_to_speech.username,
+  password: config.credentials.text_to_speech.password,
   version: 'v1'
 });
 
@@ -52,7 +52,7 @@ module.exports = NodeHelper.create({
       console.log("");
 
       micInputStream.on('data', function(data) {
-        //console.log("Recieved Input Stream: " + data.length);
+      //  console.log("Recieved Input Stream: " + data.length);
       });
 
       micInputStream.on('error', function(err) {
@@ -120,7 +120,7 @@ module.exports = NodeHelper.create({
               console.log("Result from conversation:" ,conversation_response);
 
               tempStream = text_to_speech.synthesize(params).pipe(fs.createWriteStream('output.wav')).on('close', function() {
-                var create_audio = exec('aplay output.wav', function (error, stdout, stderr) {
+                var create_audio = exec('play output.wav', function (error, stdout, stderr) {
                   if (error !== null) {
                     console.log('exec error: ' + error);
                   }
